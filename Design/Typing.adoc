@@ -1,0 +1,18 @@
+Goals
+-----
+
+GearScript aims to introduce strong static typing into TorqueScript, allowing for
+a more consistent syntax while not changing semantics too much. Static type information
+will initially be erased (compare to Java Generics) as part of the compilation process,
+but that may change further down along the line. Types should be inferred to the extent
+possible, in order to reduce the amount of typing needed.
+
+Hierarchy
+---------
+
+GearScript's type system is hierarchical, but there is no true top type. Instead, there are six different top-level types: void, (float) numbers, strings, arrays, function references, and object references. This is because TorqueScript's syntax means that the primary way to do something often depends on which of these three types it belongs to. The most obvious example would be comparisons, which are done using `==` for number types and object reference comparison, but `$=` for strings. This ambiguity only arises when we have no type information available, and thus GearScript ought to resolve it transparently for the user.
+
+Inference
+---------
+
+Types should be inferred for the user whenever possible. In most cases this is obvious from a variable's definition, since the literal syntax always unambiguously contains the type of a given value. The exception to this is function parameters, the types of these have to be inferred from how the parameter is used. If ultimately multiple different branches of types are valid for a value then a type must be defined explicitly.
