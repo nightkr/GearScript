@@ -47,12 +47,15 @@ The second example works because only numbers can be added to other numbers.
 Annotations
 -----------
 
-Methods and classes may be annotated for compile-time processing by preceding the `function` (or `class`) keyword with a name prefixed by an `@`. Standard annotations:
+Methods, classes, fields, and variables may be annotated for compile-time processing by preceding the `function` (or `class` etc) keyword with a name prefixed by an `@`. Standard annotations:
 
 * For functions:
 ** `@static`
+** `@private`
 * For classes:
 ** `@noinstance`
+* For fields:
+** `@private`
 
 Examples:
 
