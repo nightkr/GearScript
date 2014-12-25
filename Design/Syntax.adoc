@@ -50,9 +50,9 @@ Annotations
 Methods and classes may be annotated for compile-time processing by preceding the `function` (or `class`) keyword with a name prefixed by an `@`. Standard annotations:
 
 * For functions:
-  * `@static`
+** `@static`
 * For classes:
-  * `@noinstance`
+** `@noinstance`
 
 Examples:
 
