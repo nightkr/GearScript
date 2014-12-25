@@ -1,0 +1,118 @@
+Goals
+-----
+
+Make syntax more consistent and more familiar for users of other languages. Use type hints to resolve ambiguities between different ways to do things.
+
+Operators
+---------
+
+Operators should be overloaded using type hints, instead of varying their syntax by type. Examples:
+
+* `"a" + "b"` becomes `"a" @ "b"`
+
+Strings
+-------
+
+Strings are still defined using double-quotes (`"a"`).
+
+Strings can no longer be arbitrarily appended to other types using the `+` operator, but string interpolation makes it possible to embed values of arbitrary types where required. Examples:
+
+* `"Score: #score"` becomes `"Score: " @ %score`
+* `"Server Load: $ServerLoad"` becomes "Server Load: " @ $ServerLoad`
+
+Variables
+---------
+
+Global variables keep their existing syntax, but the `%` prefix is dropped for local variables. The first time a variable is used it may be assigned an explicit type using the syntax `x: Number = 5`. If none is provided then it is inferred from the value assigned.
+
+Functions
+---------
+
+Functions should keep their usual syntax from TorqueScript, except for the changed variable syntax and optional type annotations. These examples are both perfectly valid:
+
+----------
+function increment(x: Number): Number {
+    return x + 1;
+}
+----------
+
+----------
+function increment(x) {
+    return x + 1;
+}
+----------
+
+The second example works because only numbers can be added to other numbers.
+
+Annotations
+-----------
+
+Methods and classes may be annotated for compile-time processing by preceding the `function` (or `class`) keyword with a name prefixed by an `@`. Standard annotations:
+
+* For functions:
+  * `@static`
+* For classes:
+  * `@noinstance`
+
+Examples:
+
+----------
+@static
+function bleigh() {
+}
+----------
+
+Classes
+-------
+
+Syntax should encourage defining all the methods of one object in one place, and thus there is a new block construct for defining classes. The first parameter of each method is defined implicitly and called `this`, unless the method is annotated as static. Examples:
+
+----------
+class MyClass {
+    greeting = "hey!";
+
+    function myMethod() {
+        return this.greeting;
+    }
+
+    @static
+    function myStaticMethod() {
+        return "hey there!";
+    }
+}
+----------
+
+becomes
+
+----------
+function MyClass::myMethod(%this) {
+    return %this.greeting;
+}
+
+function MyClass::myStaticMethod() {
+    return "hey there!";
+}
+
+function MyClass::onAdd(%this) {
+    %this.greeting = "hey!";
+}
+----------
+
+[level=2]
+Reopened Classes
+----------------
+
+Normally a new instance of your class would be created immediately. This can be suppressed by using the `@noinstance` annotation, thus making reopening the class safe. However, reopened classes may not define further fields on an instance.
+
+[level=2]
+Method Access Rewriting
+-----------------------
+
+Some types (strings and numbers) have functions in the standard library defined with a prefix that would be much more natural as methods. GearScript allows you to access them as such. Examples:
+
+* `1.abs()` becomes `mAbs(1)`
+
+Currently, the following rename rules are defined:
+
+* `Number.foo()` becomes `mFoo()`
+* `String.foo()` becomes `strFoo()`
