@@ -1,11 +1,7 @@
 Goals
 -----
 
-GearScript aims to introduce strong static typing into TorqueScript, allowing for
-a more consistent syntax while not changing semantics too much. Static type information
-will initially be erased (compare to Java Generics) as part of the compilation process,
-but that may change further down along the line. Types should be inferred to the extent
-possible, in order to reduce the amount of typing needed.
+GearScript aims to introduce strong static typing into TorqueScript, allowing for a more consistent syntax while not changing semantics too much. Static type information will initially be erased (similarly to Java Generics) as part of the compilation process, but that may change further down along the line. Types should be inferred to the extent possible, in order to reduce the amount of typing needed.
 
 Hierarchy
 ---------
@@ -15,4 +11,9 @@ GearScript's type system is hierarchical, but there is no true top type. Instead
 Inference
 ---------
 
-Types should be inferred for the user whenever possible. In most cases this is obvious from a variable's definition, since the literal syntax always unambiguously contains the type of a given value. The exception to this is function parameters, the types of these have to be inferred from how the parameter is used. If ultimately multiple different branches of types are valid for a value then a type must be defined explicitly.
+Types should be inferred for the user whenever possible. In most cases this is obvious from a variable's definition, since the literal syntax always unambiguously contains the type of a given value. The exception to this is function parameters, the types of these have to be inferred from how the parameter is used. If they are used as arguments for a function, inherit that type. If methods are called on them, look at what types we know about that expose those methods. If ultimately multiple different branches of types (like either an int or a string, or two different subclasses of the same class) are valid for a value then a type must be defined explicitly.
+
+Custom Top Types
+----------------
+
+It should be possible for users to define new top-level types with unique behaviour that wrap other types. Use case: tagged strings.
