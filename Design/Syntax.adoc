@@ -23,7 +23,7 @@ Strings can no longer be arbitrarily appended to other types using the `+` opera
 Variables
 ---------
 
-Global variables keep their existing syntax, but the `%` prefix is dropped for local variables. The first time a variable is used it may be assigned an explicit type using the syntax `x: Number = 5`. If none is provided then it is inferred from the value assigned.
+Variables mostly keep their TS syntax, but the first time a variable is used it may be assigned an explicit type using the syntax `x: Number = 5`. If none is provided then it is inferred from the value assigned.
 
 Functions
 ---------
@@ -31,14 +31,14 @@ Functions
 Functions should keep their usual syntax from TorqueScript, except for the changed variable syntax and optional type annotations. These examples are both perfectly valid:
 
 ----------
-function increment(x: Number): Number {
-    return x + 1;
+function increment(%x: Number): Number {
+    return %x + 1;
 }
 ----------
 
 ----------
-function increment(x) {
-    return x + 1;
+function increment(%x) {
+    return %x + 1;
 }
 ----------
 
@@ -75,7 +75,7 @@ class MyClass {
     greeting = "hey!";
 
     function myMethod() {
-        return this.greeting;
+        return %this.greeting;
     }
 
     @static
