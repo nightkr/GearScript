@@ -17,3 +17,8 @@ Custom Top Types
 ----------------
 
 It should be possible for users to define new top-level types with unique behaviour that wrap other types. Use case: tagged strings.
+
+Nullability
+-----------
+
+Types generally aren't nullable, but they can be explicitly marked as such by suffixing them with a `?`. These values must be given a default value before they can be used for anything else than equality tests. Strings can never be nullable, but the null default value operator will treat an empty string as a null.
