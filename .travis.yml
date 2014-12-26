@@ -4,3 +4,4 @@ ghc:
   - 7.6 # Ubuntu 14.04 LTS :(
 script:
   - cabal configure --flags=ci --enable-tests && cabal build && cabal test
+sudo: false
