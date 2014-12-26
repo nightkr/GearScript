@@ -3,7 +3,7 @@ ghc:
   - 7.8 # Current version :D
   - 7.6 # Ubuntu 14.04 LTS :(
 install:
-  - env
+  - cabal sandbox init
   - cabal install --only-dependencies --enable-tests
 script:
   - cabal configure --flags=ci --enable-tests && cabal build && cabal test
