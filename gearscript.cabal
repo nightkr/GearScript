@@ -45,6 +45,9 @@ build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
 
+flag ci
+  description:         Turn on even stricter build flags, mostly for CI use
+  default:             False
 
 executable gearscript
   -- .hs or .lhs file containing the Main module.
@@ -68,6 +71,8 @@ executable gearscript
                        OverloadedStrings
 
   ghc-options: -Wall
+  if flag(ci)
+    ghc-options: -Werror
   
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.7 && <4.8

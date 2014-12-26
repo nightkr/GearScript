@@ -1,0 +1,6 @@
+language: haskell
+ghc:
+  - 7.8 # Current version :D
+  - 7.6 # Ubuntu 14.04 LTS :(
+script:
+  - cabal configure --flags=ci --enable-tests && cabal build && cabal test
