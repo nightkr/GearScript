@@ -1,10 +1,13 @@
 module Main where
 
 import GearScript.AST
-import GearScript.Lexer
-import GearScript.Parser
-import GearScript.CodeGen
+import GearScript.Lexer(lexGS)
+import GearScript.Parser(parseGS)
+import GearScript.CodeGen(doPprint)
+import Control.Applicative
+import Data.Maybe
 import qualified Data.Text as T
+import System.Environment
 
 liftEitherM :: (Monad m, Show a) => Either a b -> m b
 liftEitherM (Left x) = fail $ show x
@@ -18,7 +21,8 @@ parse file = do
 
 main :: IO ()
 main = do
-    ast <- parse "Examples/Example1.gs"
+    path <- fromMaybe "Examples/Example1" . listToMaybe <$> getArgs
+    ast <- parse $ path ++ ".gs"
     let result = doPprint ast
     putStrLn result
-    writeFile "Examples/Example1.cs" result
+    writeFile (path ++ ".cs") result
