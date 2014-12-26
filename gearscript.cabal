@@ -75,7 +75,7 @@ executable gearscript
     ghc-options: -Werror
   
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.7 && <4.8
+  build-depends:       base >=4.6 && <4.8
   
   -- Directories containing source files.
   hs-source-dirs:      src
