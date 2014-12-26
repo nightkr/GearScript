@@ -1,6 +1,6 @@
 module GearScript.Lexer where
 
-import Control.Applicative((<$>), (<*>), (<$), (<*), (*>))
+import Control.Applicative((<$>), (<*>), (<$), (*>))
 import Control.Monad
 import Data.Maybe(catMaybes)
 import Data.Text hiding (concat)

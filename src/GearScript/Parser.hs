@@ -1,7 +1,7 @@
 module GearScript.Parser where
 
 import qualified GearScript.Lexer as L
-import Control.Applicative((<$>), (<$), (<*), (*>), (<*>))
+import Control.Applicative((<$>), (<$), (<*), (*>))
 import Text.Parsec.Error
 import Text.Parsec.Pos
 import Text.Parsec.Prim
