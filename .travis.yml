@@ -2,8 +2,13 @@ language: haskell
 ghc:
   - 7.8 # Current version :D
   - 7.6 # Ubuntu 14.04 LTS :(
+env:
+  - PINNED_DEPS=1
+  - PINNED_DEPS=0
 install:
-  - cabal sandbox init
+  # Don't use pinned versions for 7.6 since 7.6 ships with an old version of base (and won't accept substitutes)
+  - '[[ $PINNED_DEPS == 1 && ":$PATH:" == *":/usr/local/ghc/$(ghc_find 7.6)/bin/:"* ]] && exit 0 || true'
+  - '[[ $PINNED_DEPS == 0 ]] && rm cabal.config || true'
   - cabal install --only-dependencies --enable-tests
 script:
   - cabal configure --flags=ci --enable-tests && cabal build && cabal test
