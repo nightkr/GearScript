@@ -24,8 +24,8 @@ function DM_discoverBuilds() {
 	if (!isFile("config/server/deathmatch/builds/README.txt")) {
 		%regex = "Add-Ons/GameMode_Deathmatch/defaults/builds/*.*";
 		%targetFO = new FileObject();
-		for (%i = findFirstFile(%regex) ; %i !$= "" ; %i = findNextFile(%regex)) {
-			%targetPath = "config/server/deathmatch/builds/" @ fileName(%i);
+		for (%i = findFirstFile(%regex) ; %i != "" ; %i = findNextFile(%regex)) {
+			%targetPath = "config/server/deathmatch/builds/" + fileName(%i);
 
 			%fo.openForRead(%i); // Hack because fileCopy doesn't seem to like zip files
 			%targetFO.openForWrite(%targetPath);
@@ -40,7 +40,7 @@ function DM_discoverBuilds() {
 	}
 
 	%regex = "config/server/deathmatch/builds/*.dm";
-	for (%i = findFirstFile(%regex) ; %i !$= "" ; %i = findNextFile(%regex)) {
+	for (%i = findFirstFile(%regex) ; %i != "" ; %i = findNextFile(%regex)) {
 		%fo.openForRead(%i);
 
 		%name = trim(strReplace(fileName(fileBase(%i)), "_", " "));
@@ -62,12 +62,12 @@ function DM_discoverBuilds() {
 		while(!%fo.isEOF()) {
 			%line = %fo.readLine();
 
-			switch$(getWord(%line, 0)) {
+			switch(getWord(%line, 0)) {
 				case "addon":
 					%addOn = getWords(%line, 1);
 					$AddOn__[%addOn] = true; // Enable the add-on
 					if (forceRequiredAddOn(%addOn) == $Error::AddOn_NotFound) {
-						error("Add-On" SPC %addOn SPC "(required by" SPC %name @ ") was not found), skipping build" SPC %name);
+						error("Add-On " + %addOn + " (required by " + %name + ") was not found), skipping build " + %name);
 						%success = false;
 						break;
 					}
@@ -85,7 +85,7 @@ function DM_discoverBuilds() {
 					%toolNum = getWord(%line, 1);
 					%currTool = getWords(%line, 2);
 
-					if (%toolNum !$= %toolNum + 0) {
+					if (%toolNum != %toolNum + 0) {
 						error(%toolNum SPC "is not a valid int, skipping build" SPC %name);
 						%success = false;
 						break;
@@ -128,7 +128,7 @@ function DM_discoverBuilds() {
 			}
 		}
 
-		if (%success && %build $= "") {
+		if (%success && %build == "") {
 			error("Build manifest" SPC %name SPC "has no build file, skipping");
 			%success = false;
 		}
@@ -167,7 +167,7 @@ function DM_loadBuild(%build) {
 
 	%buildID = $Deathmatch::Temp::BuildByName[%build];
 
-	if (%buildID $= "") {
+	if (%buildID == "") {
 		%msg = "DM ERROR: Build" SPC %build SPC "does not exist.";
 		error(%msg);
 		announce(%msg);
@@ -177,7 +177,7 @@ function DM_loadBuild(%build) {
 	loadEnvironmentFromFile("Add-Ons/GameMode_Deathmatch/environment.txt");
 
 	%env = $Deathmatch::Temp::BuildEnvironment[%buildID];
-	if (%env !$= "")
+	if (%env != "")
 		loadEnvironmentFromFile(%env);
 
 	$DefaultMinigame.brickDamage = $Deathmatch::Temp::BuildBrickDamage[%buildID];
@@ -213,7 +213,7 @@ function DM_getRandomBuilds(%count, %excludeCurrent) {
 		}
 
 		%buildAdded[%build] = true;
-		if (%out $= "")
+		if (%out == "")
 			%out = %build;
 		else
 			%out = %out TAB %build;
@@ -231,7 +231,7 @@ function serverCmdVote(%cl, %a, %b, %c, %d, %e, %f, %g, %h) {
 	%buildID = $Deathmatch::Temp::BuildByName[%build];
 	%build = $Deathmatch::Temp::BuildName[%buildID];
 
-	if (%buildID $= "") {
+	if (%buildID == "") {
 		messageClient(%cl, '', "That build does not exist.");
 		return;
 	}
@@ -241,12 +241,12 @@ function serverCmdVote(%cl, %a, %b, %c, %d, %e, %f, %g, %h) {
 		return;
 	}
 
-	if ($Deathmatch::Temp::Vote::Voted[%cl.bl_id] !$= "") {
+	if ($Deathmatch::Temp::Vote::Voted[%cl.bl_id] != "") {
 		messageClient(%cl, '', "You have already voted.");
 		return;
 	}
 
-	announce("\c6" @ %cl.name SPC "\c3voted for\c6" SPC %build @ "\c3.");
+	announce("\c6" + %cl.name + " \c3voted for\c6 " + %build + "\c3.");
 	$Deathmatch::Temp::Vote::Voted[%cl.bl_id] = %build;
 	$Deathmatch::Temp::Vote::MaxBL_ID = getMax($Deathmatch::Temp::Vote::MaxBL_ID, %cl.bl_id);
 }
@@ -273,7 +273,7 @@ function MiniGameSO::startBuildVote(%this) {
 
 		for (%i = 0 ; %i < %eligibleCount ; %i++) {
 			%build = getField(%eligible, %i);
-			%this.messageAll('', "\c3*" @ (%this.build $= %build ? " Extend\c6" : "\c6") SPC %build);
+			%this.messageAll('', "\c3*" + (%this.build == %build ? " Extend\c6" : "\c6") + " " + %build);
 			$Deathmatch::Temp::Vote::Eligible[%build] = true;
 		}
 
@@ -290,7 +290,7 @@ function MiniGameSO::endBuildVote(%this, %noReset) {
 	for (%i = 0 ; %i <= $Deathmatch::Temp::Vote::MaxBL_ID ; %i++) {
 		%vote = $Deathmatch::Temp::Vote::Voted[%i];
 
-		if (%vote !$= "") {
+		if (%vote != "") {
 			%tally[%vote] += 1;
 		}
 	}
@@ -357,7 +357,7 @@ package DM {
 		cancel(%this.timeLimitSchedule);
 		cancel(%this.scoreLimitSchedule);
 
-		if (%this.nextBuild $= "")
+		if (%this.nextBuild == "")
 			%this.nextBuild = DM_getRandomBuilds(1);
 		DM_loadBuild(%this.nextBuild);
 		%this.nextBuild = "";
@@ -392,11 +392,11 @@ package DM {
 		%buildID = $Deathmatch::Temp::BuildByName[%build];
 		%build = $Deathmatch::Temp::BuildName[%buildID];
 
-		if (%build $= "")
+		if (%build == "")
 			return;
 
 		$DefaultMinigame.nextBuild = %build;
-		$DefaultMinigame.messageAll('', "\c6" @ %cl.name SPC "\c3changed the build to\c6" SPC %build @ "\c3.");
+		$DefaultMinigame.messageAll('', "\c6" + %cl.name + " \c3changed the build to\c6 " + %build + "\c3.");
 		$DefaultMinigame.reset(0);
 	}
 }; activatePackage(DM);
