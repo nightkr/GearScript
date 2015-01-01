@@ -7,7 +7,6 @@ import Data.Maybe(catMaybes)
 import Data.Text hiding (concat, intercalate)
 import GearScript.Util
 import Text.Parsec hiding (tokens)
-import Text.Parsec.Combinator
 import Text.Parsec.Text
 import Text.Parsec.Prim hiding (tokens)
 
